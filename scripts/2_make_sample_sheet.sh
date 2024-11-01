@@ -9,14 +9,14 @@ source ./config.cfg
 
 # Location of fastq.gz files.
 
-echo "Fastq files found in: " $FASTQDIR
+echo "Fastq files found in: " $FASTQDIR_2
 
 # bash magic to get file lists and create a sample sheet (lists paired files for each strain)
 # See https://www.biostars.org/p/449164/
 
 # Create .list files with R1 and R2 fastqs.  Sort will put them in same orders, assuming files are paired
-find $FASTQDIR -maxdepth 1 -name "*.fastq.gz" | grep -e "_R1" | sort > R1.list ;
-find $FASTQDIR -maxdepth 1 -name "*.fastq.gz" | grep -e "_R2" | sort > R2.list ;
+find $FASTQDIR_2 -maxdepth 1 -name "*.fastq.gz" | grep -e "_R1" | sort > R1.list ;
+find $FASTQDIR_2 -maxdepth 1 -name "*.fastq.gz" | grep -e "_R2" | sort > R2.list ;
 
 # For debug purposes... delete sample sheet if it exists
 if [ -f "${SAMPLE_SHEET}" ] ; then
