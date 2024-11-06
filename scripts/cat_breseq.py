@@ -37,6 +37,7 @@ def index_reader(item, table, outfile, ignore, table_type):
     if table_type == 1:
         for row in table.find_all("tr")[2:]:
             text = [td.get_text() for td in row.find_all("td")]
+            print(text)
             for i in text:
                 print(i)
             evidence = text[0]
