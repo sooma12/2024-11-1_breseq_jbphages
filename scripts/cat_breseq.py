@@ -39,44 +39,37 @@ def index_reader(item, table, outfile, ignore, table_type):
             text = [td.get_text() for td in row.find_all("td")]
             print(text)
             evidence = text[0]
-            seq_id = text[1]
-            position = text[2]
-            mutation = text[3]
-            annotation = text[4]
-            gene = text[5]
-            description = text[6]
-            # Discard mutations mapped to plasmid genes
-            if seq_id == "NZ_CP012004": 
-                if "ACX60_RS00525" not in gene:
-                    if ignore not in gene:
-                        result = [item, evidence, seq_id, position, mutation, annotation, gene, description]
-                        with open(outfile, 'a', newline='') as csvfile:
-                            output_writer = csv.writer(csvfile, delimiter='\t')
-                            output_writer.writerow(result)
+            position = text[1]
+            mutation = text[2]
+            annotation = text[3]
+            gene = text[4]
+            description = text[5]
+            result = [item, evidence, position, mutation, annotation, gene, description]
+            with open(outfile, 'a', newline='') as csvfile:
+                output_writer = csv.writer(csvfile, delimiter='\t')
+                output_writer.writerow(result)
 
     elif table_type == 2:
         for row in table.find_all("tr")[2:]:
             text = [td.get_text() for td in row.find_all("td")]
             if len(text) == 7:
-                seq_id = text[1]
+                position = text[1]
+                read_cov1 = text[2]
+                annotation = text[3]
+                gene = text[4]
+                product = text[5]
+                result = [item, position, read_cov1, "", "", "", "", annotation, gene, product]
+            elif len(text) == 12:
                 position = text[2]
                 read_cov1 = text[3]
-                annotation = text[4]
-                gene = text[5]
-                product = text[6]
-                result = [item, seq_id, position, read_cov1, "", "", "", "", annotation, gene, product]
-            elif len(text) == 12:
-                seq_id = text[2]
-                position = text[3]
-                read_cov1 = text[4]
-                read_cov2 = text[5]
-                score = text[6]
-                skew = text[7]
-                freq = text[8]
-                annotation = text[9]
-                gene = text[10]
-                product = text[11]
-                result = [item, seq_id, position, read_cov1, read_cov2, score, skew, freq, annotation, gene, product]
+                read_cov2 = text[4]
+                score = text[5]
+                skew = text[6]
+                freq = text[7]
+                annotation = text[8]
+                gene = text[9]
+                product = text[10]
+                result = [item, position, read_cov1, read_cov2, score, skew, freq, annotation, gene, product]
             with open(outfile, 'a', newline='') as csvfile:
                 output_writer = csv.writer(csvfile, delimiter='\t')
                 output_writer.writerow(result)
@@ -86,8 +79,8 @@ def main():
     infile = opts.infile
     ignore = opts.ignore
     outdir = opts.outdir
-    header_1 = ["Sample", "Evidence", "Seq_ID", "Position", "Mutation", "Annotation", "Gene", "Description"]
-    header_2 = ["Sample", "Seq_ID", "Positions", "Reads (cov)", "Reads (cov)", "Score", "Skew", "Freq", "Annotation", "Gene", "Product"]
+    header_1 = ["Sample", "Evidence", "Position", "Mutation", "Annotation", "Gene", "Description"]
+    header_2 = ["Sample", "Positions", "Reads (cov)", "Reads (cov)", "Score", "Skew", "Freq", "Annotation", "Gene", "Product"]
     if path.isdir(outdir):
         outfile_1 = path.join(outdir, "Predicted_Mutations_all.txt")
         outfile_2 = path.join(outdir, "Unassigned_new_junction_evidence_all.txt")
@@ -102,8 +95,6 @@ def main():
             output_writer.writerow(header_2)
     generate_summary(infile, ignore, outfile_1, outfile_2)
 
-    print("Predicted mutations saved as: " + outfile_1  + "\n")
-    print("Unassigned new junction evidece saved as: " + outfile_2 + "\n")
 
 if __name__ == '__main__':
     main()
