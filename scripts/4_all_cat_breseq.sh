@@ -10,6 +10,6 @@ paste output_dirs.list | while read directory ;
 do
   rootname=$(basename ${directory})
   python ${SCRIPT_DIR}/cat_breseq.py -i ${directory} -o ${CAT_OUT_PATH}
-  mv ${CAT_OUT_PATH}/Predicted_Mutations_all.txt ${CAT_OUT_PATH}/${rootname}_predicted_mutations.txt
-  mv ${CAT_OUT_PATH}/Unassigned_new_junction_evidence_all.txt ${CAT_OUT_PATH}/${rootname}_unassigned_new_junction_evidence.txt
+  mv ${CAT_OUT_PATH}/Predicted_Mutations_all.txt ${CAT_OUT_PATH}/${rootname}_predicted_mutations.txt || echo 'mv failed'
+  mv ${CAT_OUT_PATH}/Unassigned_new_junction_evidence_all.txt ${CAT_OUT_PATH}/${rootname}_unassigned_new_junction_evidence.txt || echo 'mv failed'
 done
